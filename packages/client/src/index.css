@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --c-bg: #111;
+  --c-text: #EEE;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: 'Source Code Pro', monospace;
+}
+
+/* layout */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+main {
+  flex-grow: 1;
+}
+
+/* utils */
+.font-dot {
+  font-family: 'Silkscreen', cursive;
+}

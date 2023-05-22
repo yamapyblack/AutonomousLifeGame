@@ -1,0 +1,45 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "wait-port localhost:8545 && vite",
+    "initialize": "pnpm build",
+    "preview": "vite preview",
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
+    "@generouted/react-router": "^1.12.8",
+    "@latticexyz/common": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/dev-tools": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/network": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/react": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/recs": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/schema-type": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/std-client": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/utils": "2.0.0-alpha.1.148+85e38ba8",
+    "@latticexyz/world": "2.0.0-alpha.1.148+85e38ba8",
+    "@wagmi/chains": "^0.2.22",
+    "contracts": "workspace:*",
+    "ethers": "^5.7.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.11.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.14",
+    "eslint-plugin-react": "7.31.11",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.2.1",
+    "wait-port": "^1.0.4"
+  }
+}
