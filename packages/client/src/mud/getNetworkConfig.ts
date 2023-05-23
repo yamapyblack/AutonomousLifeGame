@@ -29,9 +29,9 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
   console.log("chainId:", chainId);
   const chainIndex = supportedChains.findIndex((c) => c.id === chainId);
   const chain = supportedChains[chainIndex];
-  // if (!chain) {
-  //   throw new Error(`Chain ${chainId} not found`);
-  // }
+  if (!chain) {
+    throw new Error(`Chain ${chainId} not found`);
+  }
 
   const world = worlds[chainId.toString()];
   const worldAddress = params.get("worldAddress") || world?.address;
