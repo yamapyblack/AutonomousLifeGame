@@ -163,7 +163,7 @@ export const GameBoard = () => {
               </button>
             </div>
             <form onSubmit={handleLogin}>
-              <div>
+              <div className="flex items-center justify-center mt-6">
                 <label htmlFor="userId" className="sr-only">
                   Player ID
                 </label>
@@ -171,7 +171,7 @@ export const GameBoard = () => {
                   id="userId"
                   type="text"
                   required
-                  className="w-full px-3 py-2 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none"
+                  className="w-2/3 px-3 py-2 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none"
                   placeholder="Player ID"
                   // onChange={(e) => setUserId(e.target.value)}
                 />

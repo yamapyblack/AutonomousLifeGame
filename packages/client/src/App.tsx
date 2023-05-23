@@ -20,7 +20,7 @@ export const App = () => {
   return (
     <div className="wrapper">
       <header className="z-50 text-center">
-        <h1 className="font-dot text-5xl p-4">Autonomous Life Game</h1>
+        <h1 className="font-dot text-5xl p-4">Autonomous Game Of Life</h1>
       </header>
       {/* <div className=" bg-red-500 text-sky-600">
         Counter: <span>{counter?.value ?? "??"}</span>
