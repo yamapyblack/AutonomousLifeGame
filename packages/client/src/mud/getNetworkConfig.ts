@@ -47,6 +47,17 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
 
   console.log("initialBlockNumber:", initialBlockNumber);
 
+  const jsonRpcUrl =
+    params.get("rpc") ||
+    import.meta.env.JSON_RPC_URL ||
+    chain?.rpcUrls.default.http[0];
+  console.log("jsonRpcUrl:", jsonRpcUrl);
+  const wsRpcUrl =
+    params.get("wsRpc") ||
+    import.meta.env.WS_RPC_URL ||
+    chain?.rpcUrls.default.webSocket?.[0];
+  console.log("wsRpcUrl:", wsRpcUrl);
+
   return {
     clock: {
       period: 1000,
@@ -55,19 +66,21 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     },
     provider: {
       chainId,
-      jsonRpcUrl:
-        params.get("rpc") ||
-        import.meta.env.JSON_RPC_URL ||
-        chain?.rpcUrls.default.http[0],
-      wsRpcUrl:
-        params.get("wsRpc") ||
-        import.meta.env.WS_RPC_URL ||
-        chain?.rpcUrls.default.webSocket?.[0],
+      // jsonRpcUrl:
+      //   params.get("rpc") ||
+      //   import.meta.env.JSON_RPC_URL ||
+      //   chain?.rpcUrls.default.http[0],
+      // wsRpcUrl:
+      //   params.get("wsRpc") ||
+      //   import.meta.env.WS_RPC_URL ||
+      //   chain?.rpcUrls.default.webSocket?.[0],
       // jsonRpcUrl: ,
       // wsRpcUrl: ,
       // jsonRpcUrl: "https://goerli.optimism.io",
       // wsRpcUrl:
       //   "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg",
+      jsonRpcUrl: jsonRpcUrl,
+      wsRpcUrl: wsRpcUrl,
     },
     privateKey: import.meta.env.PRIVATE_KEY || getBurnerWallet().value,
     chainId,
