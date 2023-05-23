@@ -26,6 +26,7 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
   const chainId = Number(
     params.get("chainId") || import.meta.env.VITE_CHAIN_ID || 31337
   );
+  console.log("chainId:", chainId);
   const chainIndex = supportedChains.findIndex((c) => c.id === chainId);
   const chain = supportedChains[chainIndex];
   // if (!chain) {
@@ -54,11 +55,11 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
       jsonRpcUrl:
         params.get("rpc") ||
         import.meta.env.JSON_RPC_URL ||
-        chain.rpcUrls.default.http[0],
+        chain?.rpcUrls.default.http[0],
       wsRpcUrl:
         params.get("wsRpc") ||
         import.meta.env.WS_RPC_URL ||
-        chain.rpcUrls.default.webSocket?.[0],
+        chain?.rpcUrls.default.webSocket?.[0],
       // jsonRpcUrl: ,
       // wsRpcUrl: ,
       // jsonRpcUrl: "https://goerli.optimism.io",
