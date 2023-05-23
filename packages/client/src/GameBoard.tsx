@@ -38,7 +38,7 @@ export const GameBoard = () => {
     if (isCalculating) {
       calculateInterval = setInterval(async () => {
         await calculate();
-      }, 2000);
+      }, 1500);
     }
 
     return () => {
@@ -123,7 +123,7 @@ export const GameBoard = () => {
                       ) : cell == 8 ? (
                         <div className="relative h-4 bg-dark-700 border-black border-2"></div>
                       ) : (
-                        <div className="relative h-4 bg-white border-black border-2"></div>
+                        <div className="relative h-4 bg-black border-black border-2"></div>
                       )}
                     </div>
                   );

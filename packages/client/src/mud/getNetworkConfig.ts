@@ -15,33 +15,33 @@ type NetworkConfig = SetupContractConfig & {
 export async function getNetworkConfig(): Promise<NetworkConfig> {
   const params = new URLSearchParams(window.location.search);
 
-  const chainId = Number(import.meta.env.CHAIN_ID);
-  const worldAddress = import.meta.env.WORLD_ADDRESS;
-  const initialBlockNumber = import.meta.env.INITIAL_BLOCK_NUMBER;
+  // const chainId = Number(import.meta.env.CHAIN_ID);
+  // const worldAddress = import.meta.env.WORLD_ADDRESS;
+  // const initialBlockNumber = import.meta.env.INITIAL_BLOCK_NUMBER;
 
   // const chainId = Number(420);
   // const worldAddress = "0x12DF9BEA3f7Cc25e385A30a0F53C317Bdeaa5E42";
   // const initialBlockNumber = 9690067;
 
-  // const chainId = Number(
-  //   params.get("chainId") || import.meta.env.VITE_CHAIN_ID || 31337
-  // );
-  // const chainIndex = supportedChains.findIndex((c) => c.id === chainId);
-  // const chain = supportedChains[chainIndex];
-  // if (!chain) {
-  //   throw new Error(`Chain ${chainId} not found`);
-  // }
+  const chainId = Number(
+    params.get("chainId") || import.meta.env.VITE_CHAIN_ID || 31337
+  );
+  const chainIndex = supportedChains.findIndex((c) => c.id === chainId);
+  const chain = supportedChains[chainIndex];
+  if (!chain) {
+    throw new Error(`Chain ${chainId} not found`);
+  }
 
-  // const world = worlds[chain.id.toString()];
-  // const worldAddress = params.get("worldAddress") || world?.address;
-  // if (!worldAddress) {
-  //   throw new Error(
-  //     `No world address found for chain ${chainId}. Did you run \`mud deploy\`?`
-  //   );
-  // }
-  // const initialBlockNumber = params.has("initialBlockNumber")
-  //   ? Number(params.get("initialBlockNumber"))
-  //   : world?.blockNumber ?? -1; // -1 will attempt to find the block number from RPC
+  const world = worlds[chain.id.toString()];
+  const worldAddress = params.get("worldAddress") || world?.address;
+  if (!worldAddress) {
+    throw new Error(
+      `No world address found for chain ${chainId}. Did you run \`mud deploy\`?`
+    );
+  }
+  const initialBlockNumber = params.has("initialBlockNumber")
+    ? Number(params.get("initialBlockNumber"))
+    : world?.blockNumber ?? -1; // -1 will attempt to find the block number from RPC
 
   return {
     clock: {
@@ -51,19 +51,19 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     },
     provider: {
       chainId,
-      // jsonRpcUrl: params.get("rpc") ?? chain.rpcUrls.default.http[0],
-      // wsRpcUrl: params.get("wsRpc") ?? chain.rpcUrls.default.webSocket?.[0],
-      jsonRpcUrl: import.meta.env.JSON_RPC_URL,
-      wsRpcUrl: import.meta.env.WS_RPC_URL,
+      jsonRpcUrl: params.get("rpc") ?? chain.rpcUrls.default.http[0],
+      wsRpcUrl: params.get("wsRpc") ?? chain.rpcUrls.default.webSocket?.[0],
+      // jsonRpcUrl: import.meta.env.JSON_RPC_URL,
+      // wsRpcUrl: import.meta.env.WS_RPC_URL,
       // jsonRpcUrl: "https://goerli.optimism.io",
       // wsRpcUrl:
       //   "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg",
     },
-    // privateKey: getBurnerWallet().value,
-    privateKey: import.meta.env.PRIVATE_KEY,
+    privateKey: getBurnerWallet().value,
+    // privateKey: import.meta.env.PRIVATE_KEY,
     chainId,
-    // modeUrl: params.get("mode") ?? chain.modeUrl,
-    // faucetServiceUrl: params.get("faucet") ?? chain.faucetUrl,
+    modeUrl: params.get("mode") ?? chain.modeUrl,
+    faucetServiceUrl: params.get("faucet") ?? chain.faucetUrl,
     worldAddress,
     initialBlockNumber,
     snapSync: params.get("snapSync") === "true",
