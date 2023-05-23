@@ -40,9 +40,12 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
       `No world address found for chain ${chainId}. Did you run \`mud deploy\`?`
     );
   }
+  console.log("worldAddress:", worldAddress);
   const initialBlockNumber = params.has("initialBlockNumber")
     ? Number(params.get("initialBlockNumber"))
     : world?.blockNumber ?? -1; // -1 will attempt to find the block number from RPC
+
+  console.log("initialBlockNumber:", initialBlockNumber);
 
   return {
     clock: {
