@@ -62,6 +62,9 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
   const wsRpcUrl =
     "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg";
 
+  const privateKey = import.meta.env.PRIVATE_KEY;
+  console.log("privateKey:", privateKey);
+
   return {
     clock: {
       period: 1000,
@@ -83,10 +86,11 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
       jsonRpcUrl: jsonRpcUrl,
       wsRpcUrl: wsRpcUrl,
     },
-    privateKey: import.meta.env.PRIVATE_KEY || getBurnerWallet().value,
+    // privateKey: import.meta.env.PRIVATE_KEY || getBurnerWallet().value,
+    privateKey: privateKey,
     chainId,
-    modeUrl: params.get("mode") ?? chain?.modeUrl,
-    faucetServiceUrl: params.get("faucet") ?? chain?.faucetUrl,
+    // modeUrl: params.get("mode") ?? chain?.modeUrl,
+    // faucetServiceUrl: params.get("faucet") ?? chain?.faucetUrl,
     worldAddress,
     initialBlockNumber,
     snapSync: params.get("snapSync") === "true",
