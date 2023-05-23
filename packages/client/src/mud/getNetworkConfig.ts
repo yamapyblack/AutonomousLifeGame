@@ -54,8 +54,8 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
   console.log("jsonRpcUrl:", jsonRpcUrl);
   const wsRpcUrl =
     params.get("wsRpc") ||
-    import.meta.env.WS_RPC_URL ||
-    chain?.rpcUrls.default.webSocket?.[0];
+    chain?.rpcUrls.default.webSocket?.[0] ||
+    "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg";
   console.log("wsRpcUrl:", wsRpcUrl);
 
   return {
