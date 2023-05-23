@@ -3,6 +3,10 @@
     "address": "0x12DF9BEA3f7Cc25e385A30a0F53C317Bdeaa5E42",
     "blockNumber": 9690067
   },
+  "4242": {
+    "address": "0xA0953EFA47C790aA75C106839E19E0Ed41985f3b",
+    "blockNumber": 15166231
+  },
   "31337": {
     "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
   },
