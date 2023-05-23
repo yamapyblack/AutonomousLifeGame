@@ -6,7 +6,7 @@ import { world } from "./mud/world";
 
 export const GameBoard = () => {
   const [userId, setUserId] = useState("");
-  const [cellPower, setCellPower] = useState(12);
+  const [cellPower, setCellPower] = useState(13);
   const [isCalculating, setIsCalculating] = useState(false);
 
   const handleLogin = (e: any) => {

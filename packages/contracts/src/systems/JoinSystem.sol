@@ -4,7 +4,7 @@ import {System} from "@latticexyz/world/src/System.sol";
 import {MaxPlayerId, Players} from "../codegen/Tables.sol";
 
 contract JoinSystem is System {
-  uint8 public constant INIT_CELL_POWER = 12;
+  uint8 public constant INIT_CELL_POWER = 13;
 
   function join() public returns (uint8 playerId_) {
     uint8 maxPlayerId = MaxPlayerId.get();
