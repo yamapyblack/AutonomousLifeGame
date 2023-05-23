@@ -19,7 +19,7 @@ export const GameBoard = () => {
   const {
     components: { MapConfig, Players },
     network: { singletonEntity },
-    systemCalls: { add, join, calculate, getCellPower },
+    systemCalls: { add, join, calculate, getCellPower, clear },
   } = useMUD();
 
   // useEffect(() => {
@@ -141,6 +141,21 @@ export const GameBoard = () => {
               }}
             >
               {isCalculating ? "Stop" : "Start"}
+            </button>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button
+              type="button"
+              className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              onClick={async (event) => {
+                event.preventDefault();
+                await clear();
+                setUserId("");
+                setCellPower(13);
+                setIsCalculating(false);
+              }}
+            >
+              {"Reset"}
             </button>
           </div>
         </>

@@ -33,6 +33,9 @@ export function createSystemCalls(
     console.log("cellPower", cellPower);
     return cellPower;
   };
+  const clear = async () => {
+    await worldSend("clear", []);
+  };
   // const getCellPower = async (id: number) => {
   //   const tx = await worldSend("getCellPower", [id]);
   //   return await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
@@ -51,5 +54,6 @@ export function createSystemCalls(
     calculate,
     increment,
     getCellPower,
+    clear,
   };
 }

@@ -6,7 +6,9 @@ import {MapConfig, CalculatedCount, Players, MaxPlayerId} from "../codegen/Table
 contract ClearSystem is System {
   function clear() public {
     //clear map config
-    MapConfig.setCell(new bytes(0));
+    uint32 height = 45;
+    uint32 width = 60;
+    MapConfig.setCell(new bytes(width * height));
     //clear players
     uint8 _maxPlayerId = MaxPlayerId.get();
     for (uint8 i = 1; i <= _maxPlayerId; i++) {
