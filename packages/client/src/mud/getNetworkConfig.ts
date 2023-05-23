@@ -47,16 +47,20 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
 
   console.log("initialBlockNumber:", initialBlockNumber);
 
-  const jsonRpcUrl =
-    params.get("rpc") ||
-    import.meta.env.JSON_RPC_URL ||
-    chain?.rpcUrls.default.http[0];
-  console.log("jsonRpcUrl:", jsonRpcUrl);
+  // const jsonRpcUrl =
+  //   // params.get("rpc") ||
+  //   import.meta.env.JSON_RPC_URL ||
+  //   // chain.rpcUrls.default.http[0];
+  //   console.log("jsonRpcUrl:", jsonRpcUrl);
+  // const wsRpcUrl =
+  //   params.get("wsRpc") ||
+  //   chain.rpcUrls.default.webSocket?.[0] ||
+  //   "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg";
+  // console.log("wsRpcUrl:", wsRpcUrl);
+
+  const jsonRpcUrl = "https://goerli.optimism.io";
   const wsRpcUrl =
-    params.get("wsRpc") ||
-    chain?.rpcUrls.default.webSocket?.[0] ||
     "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg";
-  console.log("wsRpcUrl:", wsRpcUrl);
 
   return {
     clock: {
@@ -76,9 +80,6 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
       //   chain?.rpcUrls.default.webSocket?.[0],
       // jsonRpcUrl: ,
       // wsRpcUrl: ,
-      // jsonRpcUrl: "https://goerli.optimism.io",
-      // wsRpcUrl:
-      //   "wss://opt-goerli.g.alchemy.com/v2/aWFq-OVN3tnqGVRIStXbwf1ApF3xqWEg",
       jsonRpcUrl: jsonRpcUrl,
       wsRpcUrl: wsRpcUrl,
     },
