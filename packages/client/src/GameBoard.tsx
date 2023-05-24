@@ -82,7 +82,10 @@ export const GameBoard = () => {
             <div className="">Stamina: {cellPower}</div>
           </div>
           <div className="flex justify-center">
-            <div className="inline-grid relative overflow-hidden w-3/5">
+            <div
+              className="inline-grid overflow-hidden"
+              style={{ width: "780px" }}
+            >
               {rows.map((y) =>
                 columns.map((x) => {
                   const cell = cellValues.find(
