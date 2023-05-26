@@ -188,6 +188,7 @@ export const GameBoard = () => {
                     event.preventDefault();
                     await clear();
                     setUserId("");
+                    localStorage.removeItem("autonomousLifeGameUID");
                     setCellPower(13);
                     setIsCalculating(false);
                   }}
