@@ -73,19 +73,49 @@ export const GameBoard = () => {
   //   world.registerEntity({ id: userId })
   // )?.cellPower;
 
+  function getCellColor(cell: number | undefined): string {
+    const _cell = Number(cell);
+    if (cell === undefined || _cell === 0) return "bg-white";
+
+    const _quotient: number = _cell % 10;
+    switch (_quotient) {
+      case 0:
+        return "bg-gray-600";
+      case 1:
+        return "bg-blue-600";
+      case 2:
+        return "bg-green-600";
+      case 3:
+        return "bg-yellow-600";
+      case 4:
+        return "bg-red-600";
+      case 5:
+        return "bg-purple-600";
+      case 6:
+        return "bg-pink-600";
+      case 7:
+        return "bg-sky-600";
+      case 8:
+        return "bg-amber-600";
+      case 9:
+        return "bg-teal-600";
+      default:
+        return "bg-gray-600";
+    }
+  }
+
   return (
     <>
       {userId ? (
         <>
+          {userId && (
+            <div className="flex justify-center pb-4">
+              <div className="mr-4">Player Id: {userId}</div>
+              <div className="">Stamina: {cellPower}</div>
+            </div>
+          )}
           <div className="flex justify-center">
-            <div className="mr-4">Player Id: {userId}</div>
-            <div className="">Stamina: {cellPower}</div>
-          </div>
-          <div className="flex justify-center">
-            <div
-              className="inline-grid overflow-hidden"
-              style={{ width: "780px" }}
-            >
+            <div className="grid gap-1">
               {rows.map((y) =>
                 columns.map((x) => {
                   const cell = cellValues.find(
@@ -107,64 +137,50 @@ export const GameBoard = () => {
                         await add(x, y, Number(userId));
                       }}
                     >
-                      {cell == 0 ? (
-                        <div className="relative h-4 bg-white border-black border-2"></div>
-                      ) : cell == 1 ? (
-                        <div className="relative h-4 bg-blue-700 border-black border-2"></div>
-                      ) : cell == 2 ? (
-                        <div className="relative h-4 bg-green-700 border-black border-2"></div>
-                      ) : cell == 3 ? (
-                        <div className="relative h-4 bg-yellow-700 border-black border-2"></div>
-                      ) : cell == 4 ? (
-                        <div className="relative h-4 bg-red-700 border-black border-2"></div>
-                      ) : cell == 5 ? (
-                        <div className="relative h-4 bg-purple-700 border-black border-2"></div>
-                      ) : cell == 6 ? (
-                        <div className="relative h-4 bg-pink-700 border-black border-2"></div>
-                      ) : cell == 7 ? (
-                        <div className="relative h-4 bg-light-blue-700 border-black border-2"></div>
-                      ) : cell == 8 ? (
-                        <div className="relative h-4 bg-dark-700 border-black border-2"></div>
-                      ) : (
-                        <div className="relative h-4 bg-black border-black border-2"></div>
-                      )}
+                      <div
+                        className={`h-2.5 w-2.5 ${getCellColor(cell) ?? ""}`}
+                      />
                     </div>
                   );
                 })
               )}
             </div>
           </div>
-          <div className="flex justify-center mt-4">
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={async (event) => {
-                event.preventDefault();
-                setIsCalculating(!isCalculating);
-              }}
-            >
-              {isCalculating ? "Stop" : "Start"}
-            </button>
-          </div>
-          <div className="flex justify-center mt-4">
-            <button
-              type="button"
-              className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={async (event) => {
-                event.preventDefault();
-                await clear();
-                setUserId("");
-                setCellPower(13);
-                setIsCalculating(false);
-              }}
-            >
-              {"Reset"}
-            </button>
-          </div>
+          {userId && (
+            <>
+              <div className="flex justify-center mt-4">
+                <button
+                  type="button"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  onClick={async (event) => {
+                    event.preventDefault();
+                    setIsCalculating(!isCalculating);
+                  }}
+                >
+                  {isCalculating ? "Stop" : "Start"}
+                </button>
+              </div>
+              <div className="flex justify-center mt-4">
+                <button
+                  type="button"
+                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  onClick={async (event) => {
+                    event.preventDefault();
+                    await clear();
+                    setUserId("");
+                    setCellPower(13);
+                    setIsCalculating(false);
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="flex justify-center">
-          <div className=" p-6 m-6  border-gray-200 rounded-lg border-2  dark:border-gray-600">
+          <div className="p-6 m-6 border-gray-200 rounded-lg border-2  dark:border-gray-600">
             <div className="flex items-center justify-center p-4">
               <button
                 data-modal-hide="staticModal"
@@ -189,10 +205,18 @@ export const GameBoard = () => {
                   id="userId"
                   type="text"
                   required
+                  className=""
+                  placeholder="Player ID"
+                  onChange={(e) => setUserId(e.target.value)}
+                />
+                {/* <input
+                  id="userId"
+                  type="text"
+                  required
                   className="w-2/3 px-3 py-2 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none"
                   placeholder="Player ID"
-                  // onChange={(e) => setUserId(e.target.value)}
-                />
+                  onChange={(e) => setUserId(e.target.value)}
+                /> */}
               </div>
               <div className="flex items-center justify-center p-4">
                 <button
