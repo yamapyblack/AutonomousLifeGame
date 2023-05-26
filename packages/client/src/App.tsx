@@ -35,13 +35,18 @@ export const App = () => {
         Increment
       </button> */}
       {loadingState.state !== SyncState.LIVE ? (
-        <div>
-          {loadingState.msg} ({Math.floor(loadingState.percentage)}%)
+        <div className="font-dot text-center mt-32">
+          {loadingState.msg}
+          <br />
+          <progress
+            className="mt-6 [&::-webkit-progress-bar]:rounded-sm [&::-webkit-progress-value]:rounded-sm [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-violet-600 [&::-moz-progress-bar]:bg-violet-600"
+            value={Math.floor(loadingState.percentage)}
+            max="100"
+          />
         </div>
       ) : (
         <GameBoard />
       )}
-
       {/* <footer className="z-50 text-center py-2 text-sm">
         &copy; Komorebi88, yamapyblack, yujiym
       </footer> */}

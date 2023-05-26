@@ -3,21 +3,46 @@ import { useComponentValue, useRow } from "@latticexyz/react";
 import { useMUD } from "./MUDContext";
 import { hexToArray } from "@latticexyz/utils";
 import { world } from "./mud/world";
+import { Pause, Play, Power, PlayCircle } from "lucide-react";
+
+function getCellColor(cell: number | undefined): string {
+  const _cell = Number(cell);
+  if (cell === undefined || _cell === 0) return "bg-white/10";
+
+  const _quotient: number = _cell % 10;
+  switch (_quotient) {
+    case 0:
+      return "bg-gray-600";
+    case 1:
+      return "bg-blue-600";
+    case 2:
+      return "bg-green-600";
+    case 3:
+      return "bg-yellow-600";
+    case 4:
+      return "bg-red-600";
+    case 5:
+      return "bg-purple-600";
+    case 6:
+      return "bg-pink-600";
+    case 7:
+      return "bg-sky-600";
+    case 8:
+      return "bg-amber-600";
+    case 9:
+      return "bg-teal-600";
+    default:
+      return "bg-gray-600";
+  }
+}
 
 export const GameBoard = () => {
   const [userId, setUserId] = useState("");
   const [cellPower, setCellPower] = useState(13);
   const [isCalculating, setIsCalculating] = useState(false);
 
-  const handleLogin = (e: any) => {
-    e.preventDefault();
-    const inputUserId = e.target.elements.userId.value;
-    setUserId(inputUserId);
-    console.log(inputUserId);
-  };
-
   const {
-    components: { MapConfig, Players },
+    components: { MapConfig, Players, CalculatedCount },
     network: { singletonEntity },
     systemCalls: { add, join, calculate, getCellPower, clear },
   } = useMUD();
@@ -31,6 +56,13 @@ export const GameBoard = () => {
   //     });
   //   }
   // }, [userId]);
+
+  useEffect(() => {
+    const UID = localStorage.getItem("autonomousLifeGameUID");
+    if (UID) {
+      setUserId(UID);
+    }
+  }, [userId]);
 
   useEffect(() => {
     let calculateInterval: any;
@@ -66,6 +98,7 @@ export const GameBoard = () => {
   });
   const rows = new Array(height).fill(0).map((_, i) => i);
   const columns = new Array(width).fill(0).map((_, i) => i);
+  const activeCells: number = cellValues.filter((obj) => obj.value != 0).length;
 
   // //stamina
   // const stamina = useComponentValue(
@@ -73,19 +106,21 @@ export const GameBoard = () => {
   //   world.registerEntity({ id: userId })
   // )?.cellPower;
 
+  //CalculatedCount
+  const calculatedCount = useComponentValue(CalculatedCount, singletonEntity);
+
   return (
     <>
+      <div className="flex justify-center pt-2 pb-4 font-dot text-xl">
+        <div className="mr-8">
+          Cycle: {BigInt(calculatedCount?.value ?? 0).toLocaleString()}
+        </div>
+        <div className="">Cells: {BigInt(activeCells).toLocaleString()}</div>
+      </div>
       {userId ? (
         <>
           <div className="flex justify-center">
-            <div className="mr-4">Player Id: {userId}</div>
-            <div className="">Stamina: {cellPower}</div>
-          </div>
-          <div className="flex justify-center">
-            <div
-              className="inline-grid overflow-hidden"
-              style={{ width: "780px" }}
-            >
+            <div className="grid gap-1">
               {rows.map((y) =>
                 columns.map((x) => {
                   const cell = cellValues.find(
@@ -107,104 +142,86 @@ export const GameBoard = () => {
                         await add(x, y, Number(userId));
                       }}
                     >
-                      {cell == 0 ? (
-                        <div className="relative h-4 bg-white border-black border-2"></div>
-                      ) : cell == 1 ? (
-                        <div className="relative h-4 bg-blue-700 border-black border-2"></div>
-                      ) : cell == 2 ? (
-                        <div className="relative h-4 bg-green-700 border-black border-2"></div>
-                      ) : cell == 3 ? (
-                        <div className="relative h-4 bg-yellow-700 border-black border-2"></div>
-                      ) : cell == 4 ? (
-                        <div className="relative h-4 bg-red-700 border-black border-2"></div>
-                      ) : cell == 5 ? (
-                        <div className="relative h-4 bg-purple-700 border-black border-2"></div>
-                      ) : cell == 6 ? (
-                        <div className="relative h-4 bg-pink-700 border-black border-2"></div>
-                      ) : cell == 7 ? (
-                        <div className="relative h-4 bg-light-blue-700 border-black border-2"></div>
-                      ) : cell == 8 ? (
-                        <div className="relative h-4 bg-dark-700 border-black border-2"></div>
-                      ) : (
-                        <div className="relative h-4 bg-black border-black border-2"></div>
-                      )}
+                      <div
+                        className={`h-2.5 w-2.5 ${getCellColor(cell) ?? ""}`}
+                      />
                     </div>
                   );
                 })
               )}
             </div>
           </div>
-          <div className="flex justify-center mt-4">
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={async (event) => {
-                event.preventDefault();
-                setIsCalculating(!isCalculating);
-              }}
-            >
-              {isCalculating ? "Stop" : "Start"}
-            </button>
-          </div>
-          <div className="flex justify-center mt-4">
-            <button
-              type="button"
-              className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={async (event) => {
-                event.preventDefault();
-                await clear();
-                setUserId("");
-                setCellPower(13);
-                setIsCalculating(false);
-              }}
-            >
-              {"Reset"}
-            </button>
-          </div>
+          {userId && (
+            <>
+              <div className="flex justify-center py-4 font-dot items-center">
+                <div
+                  className={`mr-1.5 h-2.5 w-2.5 ${getCellColor(
+                    Number(userId)
+                  )}`}
+                />
+                <div className="mr-8">Player Id: {userId}</div>
+                <div className="mr-12">Stamina: {cellPower}</div>
+                <button
+                  type="button"
+                  className="text-white border-gray-200 hover:bg-gray-200/5 border-2 px-4 py-1.5 text-center mr-4 rounded-sm"
+                  onClick={async (event) => {
+                    event.preventDefault();
+                    setIsCalculating(!isCalculating);
+                  }}
+                >
+                  {isCalculating ? (
+                    <div className="flex items-center">
+                      <Pause size={18} className="mr-1" />
+                      Stop
+                    </div>
+                  ) : (
+                    <div className="flex items-center">
+                      <Play size={18} className="mr-1" />
+                      Start
+                    </div>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="text-white border-gray-200 hover:bg-gray-200/5 border-2 px-4 py-1.5 text-center mr-4 rounded-sm"
+                  onClick={async (event) => {
+                    event.preventDefault();
+                    await clear();
+                    setUserId("");
+                    setCellPower(13);
+                    setIsCalculating(false);
+                  }}
+                >
+                  <div className="flex items-center text-amber-600">
+                    <Power size={18} className="mr-1" />
+                    Reset
+                  </div>
+                </button>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <div className="flex justify-center">
-          <div className=" p-6 m-6  border-gray-200 rounded-lg border-2  dark:border-gray-600">
-            <div className="flex items-center justify-center p-4">
-              <button
-                data-modal-hide="staticModal"
-                type="button"
-                className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                onClick={async (event) => {
-                  event.preventDefault();
-                  const joinedId = (await join())!.value;
-                  setUserId(joinedId.toString());
-                  console.log("join", joinedId);
-                }}
-              >
-                Signup
-              </button>
+          <button
+            type="button"
+            className="text-white border-gray-200 hover:bg-gray-200/5 border-4 px-8 py-3 text-center rounded-sm mt-32 text-2xl font-dot"
+            onClick={async (event) => {
+              event.preventDefault();
+              const joinedId = (await join())!.value;
+              setUserId(joinedId.toString());
+              localStorage.setItem(
+                "autonomousLifeGameUID",
+                joinedId.toString()
+              );
+              console.log("join", joinedId);
+            }}
+          >
+            <div className="flex items-center">
+              <PlayCircle size={26} className="mr-4" />
+              Start Playing
             </div>
-            <form onSubmit={handleLogin}>
-              <div className="flex items-center justify-center mt-6">
-                <label htmlFor="userId" className="sr-only">
-                  Player ID
-                </label>
-                <input
-                  id="userId"
-                  type="text"
-                  required
-                  className="w-2/3 px-3 py-2 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none"
-                  placeholder="Player ID"
-                  // onChange={(e) => setUserId(e.target.value)}
-                />
-              </div>
-              <div className="flex items-center justify-center p-4">
-                <button
-                  data-modal-hide="staticModal"
-                  type="submit"
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Login
-                </button>
-              </div>
-            </form>
-          </div>
+          </button>
         </div>
       )}
     </>
