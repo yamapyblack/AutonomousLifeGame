@@ -3,10 +3,11 @@ import { useComponentValue, useRow } from "@latticexyz/react";
 import { useMUD } from "./MUDContext";
 import { hexToArray } from "@latticexyz/utils";
 import { world } from "./mud/world";
+import { Pause, Play, Power } from "lucide-react";
 
 function getCellColor(cell: number | undefined): string {
   const _cell = Number(cell);
-  if (cell === undefined || _cell === 0) return "bg-white/20";
+  if (cell === undefined || _cell === 0) return "bg-white/10";
 
   const _quotient: number = _cell % 10;
   switch (_quotient) {
@@ -106,25 +107,14 @@ export const GameBoard = () => {
 
   //CalculatedCount
   const calculatedCount = useComponentValue(CalculatedCount, singletonEntity);
-  if (calculatedCount == null) {
-    throw new Error(
-      "CalculatedCount not set or not ready, only use this hook after loading state === LIVE"
-    );
-  }
 
   return (
     <>
+      <div className="flex justify-center pt-2 pb-4 font-dot">
+        Count: {BigInt(calculatedCount?.value ?? 0).toLocaleString()}
+      </div>
       {userId ? (
         <>
-          {userId && (
-            <div className="flex justify-center pb-4">
-              <div className="mr-4">Player Id: {userId}</div>
-              <div className="mr-4">Stamina: {cellPower}</div>
-              <div className="">
-                Count: {BigInt(calculatedCount?.value).toLocaleString()}
-              </div>
-            </div>
-          )}
           <div className="flex justify-center">
             <div className="grid gap-1">
               {rows.map((y) =>
@@ -159,22 +149,32 @@ export const GameBoard = () => {
           </div>
           {userId && (
             <>
-              <div className="flex justify-center mt-4">
+              <div className="flex justify-center py-4 font-dot items-center">
+                <div className="mr-8">Player Id: {userId}</div>
+                <div className="mr-12">Stamina: {cellPower}</div>
                 <button
                   type="button"
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="text-white border-gray-200 hover:bg-gray-200/5 border-2 px-4 py-1.5 text-center mr-4 rounded-sm"
                   onClick={async (event) => {
                     event.preventDefault();
                     setIsCalculating(!isCalculating);
                   }}
                 >
-                  {isCalculating ? "Stop" : "Start"}
+                  {isCalculating ? (
+                    <div className="flex items-center">
+                      <Pause size={18} className="mr-1" />
+                      Stop
+                    </div>
+                  ) : (
+                    <div className="flex items-center">
+                      <Play size={18} className="mr-1" />
+                      Start
+                    </div>
+                  )}
                 </button>
-              </div>
-              <div className="flex justify-center mt-4">
                 <button
                   type="button"
-                  className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  className="text-white border-gray-200 hover:bg-gray-200/5 border-2 px-4 py-1.5 text-center mr-4 rounded-sm"
                   onClick={async (event) => {
                     event.preventDefault();
                     await clear();
@@ -183,7 +183,10 @@ export const GameBoard = () => {
                     setIsCalculating(false);
                   }}
                 >
-                  Reset
+                  <div className="flex items-center text-amber-600">
+                    <Power size={18} className="mr-1" />
+                    Reset
+                  </div>
                 </button>
               </div>
             </>
