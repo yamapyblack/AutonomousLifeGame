@@ -98,6 +98,7 @@ export const GameBoard = () => {
   });
   const rows = new Array(height).fill(0).map((_, i) => i);
   const columns = new Array(width).fill(0).map((_, i) => i);
+  const activeCells: number = cellValues.filter((obj) => obj.value != 0).length;
 
   // //stamina
   // const stamina = useComponentValue(
@@ -110,8 +111,11 @@ export const GameBoard = () => {
 
   return (
     <>
-      <div className="flex justify-center pt-2 pb-4 font-dot">
-        Count: {BigInt(calculatedCount?.value ?? 0).toLocaleString()}
+      <div className="flex justify-center pt-2 pb-4 font-dot text-xl">
+        <div className="mr-8">
+          Count: {BigInt(calculatedCount?.value ?? 0).toLocaleString()}
+        </div>
+        <div className="">Cells: {BigInt(activeCells).toLocaleString()}</div>
       </div>
       {userId ? (
         <>
