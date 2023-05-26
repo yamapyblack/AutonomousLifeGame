@@ -6,11 +6,11 @@ AutonomousLifeGame is Multiplayer Onchain Game of Life + Onchain cellular automa
 
 ## Description
 
-Autonomous Game of Life brings multiplayer Game of Life on-chain using MUD v2 for the first time, allowing anyone to play forever. Also we open-sourced Onchain cellular automaton template for AWs. 
+Autonomous Game of Life brings multiplayer Game of Life on-chain using MUD v2 for the first time, allowing anyone to play forever. Also we open-sourced Onchain cellular automaton template for AWs.
 
 Our project aims to create a fully decentralized and multiplayer version of Conway's Game of Life, leveraging the capabilities of blockchain technology. And sharing templates so that anyone can build other cellular automata models on chain easily. By combining the principles of cellular automaton with the transparent and immutable nature of blockchain, we aim to provide an interactive and collaborative gaming experience for players.
 
-We believe onchain cellular automaton can serve as a base layer tool for simulating and modeling autonomous worlds. 
+We believe onchain cellular automaton can serve as a base layer tool for simulating and modeling autonomous worlds.
 
 Note: The Game of Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970 by wikipedia.
 
