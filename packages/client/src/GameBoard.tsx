@@ -41,13 +41,6 @@ export const GameBoard = () => {
   const [cellPower, setCellPower] = useState(13);
   const [isCalculating, setIsCalculating] = useState(false);
 
-  const handleLogin = (e: any) => {
-    e.preventDefault();
-    const inputUserId = e.target.elements.userId.value;
-    setUserId(inputUserId);
-    console.log(inputUserId);
-  };
-
   const {
     components: { MapConfig, Players, CalculatedCount },
     network: { singletonEntity },
@@ -161,6 +154,11 @@ export const GameBoard = () => {
           {userId && (
             <>
               <div className="flex justify-center py-4 font-dot items-center">
+                <div
+                  className={`mr-1.5 h-2.5 w-2.5 ${getCellColor(
+                    Number(userId)
+                  )}`}
+                />
                 <div className="mr-8">Player Id: {userId}</div>
                 <div className="mr-12">Stamina: {cellPower}</div>
                 <button
