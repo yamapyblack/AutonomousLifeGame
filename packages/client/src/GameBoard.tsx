@@ -4,6 +4,37 @@ import { useMUD } from "./MUDContext";
 import { hexToArray } from "@latticexyz/utils";
 import { world } from "./mud/world";
 
+function getCellColor(cell: number | undefined): string {
+  const _cell = Number(cell);
+  if (cell === undefined || _cell === 0) return "bg-white/20";
+
+  const _quotient: number = _cell % 10;
+  switch (_quotient) {
+    case 0:
+      return "bg-gray-600";
+    case 1:
+      return "bg-blue-600";
+    case 2:
+      return "bg-green-600";
+    case 3:
+      return "bg-yellow-600";
+    case 4:
+      return "bg-red-600";
+    case 5:
+      return "bg-purple-600";
+    case 6:
+      return "bg-pink-600";
+    case 7:
+      return "bg-sky-600";
+    case 8:
+      return "bg-amber-600";
+    case 9:
+      return "bg-teal-600";
+    default:
+      return "bg-gray-600";
+  }
+}
+
 export const GameBoard = () => {
   const [userId, setUserId] = useState("");
   const [cellPower, setCellPower] = useState(13);
@@ -17,7 +48,7 @@ export const GameBoard = () => {
   };
 
   const {
-    components: { MapConfig, Players },
+    components: { MapConfig, Players, CalculatedCount },
     network: { singletonEntity },
     systemCalls: { add, join, calculate, getCellPower, clear },
   } = useMUD();
@@ -73,35 +104,12 @@ export const GameBoard = () => {
   //   world.registerEntity({ id: userId })
   // )?.cellPower;
 
-  function getCellColor(cell: number | undefined): string {
-    const _cell = Number(cell);
-    if (cell === undefined || _cell === 0) return "bg-white";
-
-    const _quotient: number = _cell % 10;
-    switch (_quotient) {
-      case 0:
-        return "bg-gray-600";
-      case 1:
-        return "bg-blue-600";
-      case 2:
-        return "bg-green-600";
-      case 3:
-        return "bg-yellow-600";
-      case 4:
-        return "bg-red-600";
-      case 5:
-        return "bg-purple-600";
-      case 6:
-        return "bg-pink-600";
-      case 7:
-        return "bg-sky-600";
-      case 8:
-        return "bg-amber-600";
-      case 9:
-        return "bg-teal-600";
-      default:
-        return "bg-gray-600";
-    }
+  //CalculatedCount
+  const calculatedCount = useComponentValue(CalculatedCount, singletonEntity);
+  if (calculatedCount == null) {
+    throw new Error(
+      "CalculatedCount not set or not ready, only use this hook after loading state === LIVE"
+    );
   }
 
   return (
@@ -111,7 +119,10 @@ export const GameBoard = () => {
           {userId && (
             <div className="flex justify-center pb-4">
               <div className="mr-4">Player Id: {userId}</div>
-              <div className="">Stamina: {cellPower}</div>
+              <div className="mr-4">Stamina: {cellPower}</div>
+              <div className="">
+                Count: {BigInt(calculatedCount?.value).toLocaleString()}
+              </div>
             </div>
           )}
           <div className="flex justify-center">
