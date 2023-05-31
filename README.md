@@ -1,6 +1,6 @@
-# AutonomousLifeGame
+# AutonomousGameofLife
 
-AutonomousLifeGame is Multiplayer Onchain Game of Life + Onchain cellular automaton template for AWs
+AutonomousGameofLife is Multiplayer Onchain Game of Life + Onchain cellular automaton template for AWs
 
 <img width="656" alt="image" src="https://github.com/yamapyblack/AutonomousLifeGame/assets/7692282/fd0aea82-dee4-4839-bae6-9306b0253db9">
 
