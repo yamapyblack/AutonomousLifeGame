@@ -11,11 +11,11 @@ export const App = () => {
   } = useMUD();
 
   const counter = useComponentValue(Counter, singletonEntity);
-  const loadingState = useComponentValue(LoadingState, singletonEntity, {
-    state: SyncState.CONNECTING,
-    msg: "Connecting",
-    percentage: 0,
-  });
+  // const loadingState = useComponentValue(LoadingState, singletonEntity, {
+  //   state: SyncState.CONNECTING,
+  //   msg: "Connecting",
+  //   percentage: 0,
+  // });
 
   return (
     <div className="wrapper">
@@ -34,7 +34,7 @@ export const App = () => {
       >
         Increment
       </button> */}
-      {loadingState.state !== SyncState.LIVE ? (
+      {/* {loadingState.state !== SyncState.LIVE ? (
         <div className="font-dot text-center mt-32">
           {loadingState.msg}
           <br />
@@ -46,7 +46,9 @@ export const App = () => {
         </div>
       ) : (
         <GameBoard />
-      )}
+      )} */}
+      <GameBoard />
+
       {/* <footer className="z-50 text-center py-2 text-sm">
         &copy; Komorebi88, yamapyblack, yujiym
       </footer> */}

@@ -40,6 +40,8 @@ export const GameBoard = () => {
   const [userId, setUserId] = useState("");
   const [cellPower, setCellPower] = useState(13);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [rows, setRows] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [columns, setColumns] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
   const {
     components: { MapConfig, Players, CalculatedCount },
@@ -57,48 +59,30 @@ export const GameBoard = () => {
   //   }
   // }, [userId]);
 
-  useEffect(() => {
-    const UID = localStorage.getItem("autonomousLifeGameUID");
-    if (UID) {
-      setUserId(UID);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    let calculateInterval: any;
-
-    if (isCalculating) {
-      calculateInterval = setInterval(async () => {
-        await calculate();
-      }, 1500);
-    }
-
-    return () => {
-      if (calculateInterval) {
-        clearInterval(calculateInterval);
-      }
-    };
-  }, [isCalculating]); // isCalculating is a dependency now
-
   //map
   const mapConfig = useComponentValue(MapConfig, singletonEntity);
-  if (mapConfig == null) {
-    throw new Error(
-      "map config not set or not ready, only use this hook after loading state === LIVE"
-    );
-  }
 
-  const { width, height, cell: cellData } = mapConfig;
-  const cellValues = Array.from(hexToArray(cellData)).map((value, index) => {
-    return {
-      x: index % width,
-      y: Math.floor(index / width),
-      value,
-    };
-  });
-  const rows = new Array(height).fill(0).map((_, i) => i);
-  const columns = new Array(width).fill(0).map((_, i) => i);
-  const activeCells: number = cellValues.filter((obj) => obj.value != 0).length;
+  useEffect(() => {
+    if (mapConfig) {
+      const { width, height, cell: cellData } = mapConfig;
+      const rows = new Array(height).fill(0).map((_, i) => i);
+      const columns = new Array(width).fill(0).map((_, i) => i);
+      setRows(rows);
+      setColumns(columns);
+    }
+  }, [mapConfig]);
+
+  // const { width, height, cell: cellData } = mapConfig;
+  // const cellValues = Array.from(hexToArray(cellData)).map((value, index) => {
+  //   return {
+  //     x: index % width,
+  //     y: Math.floor(index / width),
+  //     value,
+  //   };
+  // });
+  // const rows = new Array(height).fill(0).map((_, i) => i);
+  // const columns = new Array(width).fill(0).map((_, i) => i);
+  // const activeCells: number = cellValues.filter((obj) => obj.value != 0).length;
 
   // //stamina
   // const stamina = useComponentValue(
@@ -107,124 +91,37 @@ export const GameBoard = () => {
   // )?.cellPower;
 
   //CalculatedCount
-  const calculatedCount = useComponentValue(CalculatedCount, singletonEntity);
+  // const calculatedCount = useComponentValue(CalculatedCount, singletonEntity);
 
   return (
     <>
       <div className="flex justify-center pt-2 pb-4 font-dot text-xl">
         <div className="mr-8">
-          Cycle: {BigInt(calculatedCount?.value ?? 0).toLocaleString()}
+          {/* Cycle: {BigInt(calculatedCount?.value ?? 0).toLocaleString()} */}
         </div>
-        <div className="">Cells: {BigInt(activeCells).toLocaleString()}</div>
+        {/* <div className="">Cells: {BigInt(activeCells).toLocaleString()}</div> */}
       </div>
-      {userId ? (
-        <>
-          <div className="flex justify-center">
-            <div className="grid gap-1">
-              {rows.map((y) =>
-                columns.map((x) => {
-                  const cell = cellValues.find(
-                    (t) => t.x === x && t.y === y
-                  )?.value;
-
-                  return (
-                    <div
-                      key={`${x},${y}`}
-                      style={{
-                        gridColumn: x + 1,
-                        gridRow: y + 1,
-                      }}
-                      onClick={async (event) => {
-                        if (cellPower > 0) {
-                          setCellPower(cellPower - 1);
-                        }
-                        event.preventDefault();
-                        await add(x, y, Number(userId));
-                      }}
-                    >
-                      <div
-                        className={`h-2.5 w-2.5 ${getCellColor(cell) ?? ""}`}
-                      />
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </div>
-          {userId && (
-            <>
-              <div className="flex justify-center py-4 font-dot items-center">
-                <div
-                  className={`mr-1.5 h-2.5 w-2.5 ${getCellColor(
-                    Number(userId)
-                  )}`}
-                />
-                <div className="mr-8">Player Id: {userId}</div>
-                <div className="mr-12">Stamina: {cellPower}</div>
-                <button
-                  type="button"
-                  className="text-white border-gray-200 hover:bg-gray-200/5 border-2 px-4 py-1.5 text-center mr-4 rounded-sm"
-                  onClick={async (event) => {
-                    event.preventDefault();
-                    setIsCalculating(!isCalculating);
-                  }}
-                >
-                  {isCalculating ? (
-                    <div className="flex items-center">
-                      <Pause size={18} className="mr-1" />
-                      Stop
-                    </div>
-                  ) : (
-                    <div className="flex items-center">
-                      <Play size={18} className="mr-1" />
-                      Start
-                    </div>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  className="text-white border-gray-200 hover:bg-gray-200/5 border-2 px-4 py-1.5 text-center mr-4 rounded-sm"
-                  onClick={async (event) => {
-                    event.preventDefault();
-                    await clear();
-                    setUserId("");
-                    localStorage.removeItem("autonomousLifeGameUID");
-                    setCellPower(13);
-                    setIsCalculating(false);
-                  }}
-                >
-                  <div className="flex items-center text-amber-600">
-                    <Power size={18} className="mr-1" />
-                    Reset
-                  </div>
-                </button>
-              </div>
-            </>
-          )}
-        </>
-      ) : (
+      <>
         <div className="flex justify-center">
-          <button
-            type="button"
-            className="text-white border-gray-200 hover:bg-gray-200/5 border-4 px-8 py-3 text-center rounded-sm mt-32 text-2xl font-dot"
-            onClick={async (event) => {
-              event.preventDefault();
-              const joinedId = (await join())!.value;
-              setUserId(joinedId.toString());
-              localStorage.setItem(
-                "autonomousLifeGameUID",
-                joinedId.toString()
-              );
-              console.log("join", joinedId);
-            }}
-          >
-            <div className="flex items-center">
-              <PlayCircle size={26} className="mr-4" />
-              Start Playing
-            </div>
-          </button>
+          <div className="grid gap-1">
+            {rows.map((y) =>
+              columns.map((x) => {
+                return (
+                  <div
+                    key={`${x},${y}`}
+                    style={{
+                      gridColumn: x + 1,
+                      gridRow: y + 1,
+                    }}
+                  >
+                    <div className={`h-2.5 w-2.5 ${getCellColor(0)}`} />
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
-      )}
+      </>
     </>
   );
 };
